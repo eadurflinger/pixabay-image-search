@@ -3,19 +3,18 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 
 
-export default function ImageCard() {
+export default function ImageCard({image}) {
   return (
-    <Card>
-        <Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
+    <Card style={styles.imageCard}>
+        <Card.Cover source={{ uri: image.webformatURL }} />
     </Card>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  imageCard: {
+    width: '47%',
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginTop: 5,
   },
 });
