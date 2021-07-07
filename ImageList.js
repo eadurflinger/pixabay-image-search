@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Searchbar, Button } from 'react-native-paper';
 import ImageCard from './ImageCard'
@@ -6,11 +6,25 @@ import ImageDetail from './ImageDetail'
 
 
 export default function ImageList() {
-  const [searchQuery, setSearchQuery] = React.useState('');
-  const [searchResults, setSearchResults] = React.useState(null);
-  const [selectedImage, setSelectedImage] = React.useState(null);
-
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
   const onChangeSearch = query => setSearchQuery(query);
+
+  const getResults = async(text) => {
+    try {
+      const response = await fetch(`https://pixabay.com/api?key=22390465-ee16b0cc037dc7df2ed3c03ba&q=${text}`);
+      const reponseJson = await response.json();
+      setSearchResults(reponseJson);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect( 
+    () => { 
+      getResults('dog')
+    }, []);
   return (
     <View style={styles.imageList}>
         { !selectedImage ? 
@@ -19,15 +33,9 @@ export default function ImageList() {
           placeholder="Search"
           onChangeText={onChangeSearch}
           value={searchQuery}
-          onSubmitEditing={ async(event) => {
-            try {
-              const response = await fetch(`https://pixabay.com/api?key=22390465-ee16b0cc037dc7df2ed3c03ba&q=${event.nativeEvent.text}`);
-              const reponseJson = await response.json();
-              setSearchResults(reponseJson);
-            } catch (error) {
-              console.log(error);
-            }
-          }}
+          onSubmitEditing={(event) => { 
+            getResults(event.nativeEvent.text)}
+          }
         />
         <ScrollView>
           <View style={styles.imageCardListWrapper}>
