@@ -1,15 +1,20 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { Searchbar, Button, Card, Title, Paragraph } from 'react-native-paper';
+import { StyleSheet, View, ScrollView } from 'react-native';
+import { Searchbar, Button } from 'react-native-paper';
 import ImageCard from './ImageCard'
+import ImageDetail from './ImageDetail'
+
 
 export default function ImageList() {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchResults, setSearchResults] = React.useState(null);
+  const [selectedImage, setSelectedImage] = React.useState(null);
 
   const onChangeSearch = query => setSearchQuery(query);
   return (
     <View style={styles.imageList}>
+        { !selectedImage ? 
+        <>
         <Searchbar
           placeholder="Search"
           onChangeText={onChangeSearch}
@@ -26,9 +31,18 @@ export default function ImageList() {
         />
         <ScrollView>
           <View style={styles.imageCardListWrapper}>
-            {searchResults?.hits.map((searchResult) => <ImageCard key={searchResult.id} image={searchResult}/>)}
+            {searchResults?.hits.map((searchResult) => <ImageCard onClick={()=>setSelectedImage(searchResult)} key={searchResult.id} image={searchResult}/>)}
           </View>
         </ScrollView>
+        </>
+       :
+          <View>
+            <Button icon="arrow-left" onPress={() => setSelectedImage(null)}>
+                Back to Search
+            </Button>
+            <ImageDetail image={selectedImage}/>
+          </View>
+        }
     </View>
   );
 }

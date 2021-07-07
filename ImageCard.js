@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
+import { Card } from 'react-native-paper';
 
 
-export default function ImageCard({image}) {
+export default function ImageCard({image, onClick}) {
   return (
-    <Card style={styles.imageCard}>
+    <Card onPress={onClick} style={styles.imageCard}>
         <Card.Cover source={{ uri: image.webformatURL }} />
     </Card>
   );
